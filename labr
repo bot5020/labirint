@@ -1,0 +1,105 @@
+from tkinter import *
+import random
+red = "#ad7474"
+#функция для покраски соседей  
+def krac(a,b):
+    for row in range(a):
+        for cow in range(b):
+            if main[row][cow]["bg"] == "#ffffff":
+                if main[row + 2][cow]["bg"] == "#A9A9A9":
+                    main[row + 2][cow]["bg"] ='#ad7474'
+                if main[row][cow - 2]["bg"] == "#A9A9A9":
+                    main[row][cow - 2]["bg"] ='#ad7474'
+                if main[row - 2][cow]["bg"] == "#A9A9A9":
+                    main[row - 2][cow]["bg"] ='#ad7474'
+                if main[row][cow + 2]["bg"] == "#A9A9A9":
+                    main[row][cow + 2]["bg"] ='#ad7474'
+    
+    for row in range(a):
+        for cow in range(b):
+            if main[row][cow]["bg"] == "#ad7474":
+                if main[row - 1][cow]["bg"] == "#ad7474" and main[row + 1][cow]["bg"] == "#ffffff" or main[row + 1][cow]["bg"] == "#ad7474" and main[row - 1][cow]["bg"] == "#ffffff":
+                    main[row][cow]["bg"] = "#A9A9A9"
+                    continue
+                if main[row][cow -1]["bg"] == "#ad7474" and main[row][cow + 1]["bg"] == "#ffffff" or main[row][cow + 1]["bg"] == "#ad7474" and main[row][cow - 1]["bg"] == "#ffffff":
+                    main[row][cow]["bg"] = "#A9A9A9"
+                    continue
+                
+# Функция выбора рандомного соседа
+def whil(a,b):
+    temp = []
+    for row in range(a):
+        for col in range(b):
+            if main[row][col]["bg"] == "#ad7474":
+                temp.append((row, col))
+    return temp[random.randrange(len(temp))]
+
+# Функция перекраски
+def pokracka(one, two):
+    if one[0] == two[0]:
+        if one[1] < two[1]:
+            main[one[0]][one[1]]["bg"] = "#ffffff"
+            main[one[0]][one[1] + 1]["bg"] = "#ffffff"
+            main[one[0]][one[1] + 2]["bg"] = "#ffffff"
+        else:
+            main[two[0]][two[1]]["bg"] = "#ffffff"
+            main[two[0]][two[1] + 1]["bg"] = "#ffffff"
+            main[two[0]][two[1] + 2]["bg"] = "#ffffff"
+    else:
+        if one[0] < two[0]:
+            main[one[0]][one[1]]["bg"] = "#ffffff"
+            main[one[0] + 1][one[1]]["bg"] = "#ffffff"
+            main[one[0] + 2][one[1]]["bg"] = "#ffffff"
+        else:
+            main[two[0]][two[1]]["bg"] = "#ffffff"
+            main[two[0] + 1][two[1]]["bg"] = "#ffffff"
+            main[one[0] + 2][one[1]]["bg"] = "#ffffff"
+
+# Функция выбора соседа, для выбранного соседа
+def neighboard(one):
+    temp = []
+    if main[one[0] + 2][one[1]]["bg"] == "#ffffff":
+        return (one[0] + 2, one[1])
+    elif main[one[0] - 2][one[1]]["bg"] == "#ffffff":
+        return (one[0] - 2, one[1])
+    elif main[one[0]][one[1] + 2]["bg"] == "#ffffff":
+        return (one[0], one[1] + 2)
+    else:
+        return (one[0], one[1] - 2)
+            
+    
+            
+
+    
+n = 30
+m = 30
+#entries = [[False if random.randint(0, 1) == 0 else True for col in range(m)] for row in range(n)]
+root = Tk()
+root.resizable(width = False, height = False)
+root.title("Жизнь")
+
+#a = random.randrange(n)
+#a = 29
+a = n//2
+b = m//2
+#b = random.randrange(m)
+#b = 29
+main = [[None for col in range(m)] for row in range(n)]
+for row in range(n):
+	for col in range(m):
+		e = Button(width = 2, height = 1, state = DISABLED, font = "Verdana 6", bg="#A9A9A9")
+		e.grid(row = row, column = col)
+		main[row][col] = e
+
+
+            
+        
+		
+main[a][b]["bg"] = "#ffffff"
+main[a+1][b]["bg"] = "#ffffff"
+#main[a][b + 1]["bg"] = "#ffffff"
+krac(n, m)
+print(whil(n, m), neighboard(whil(n, m)))
+pokracka(whil(n, m), neighboard(whil(n, m)))
+#print(whil(n, m))
+root.mainloop()
